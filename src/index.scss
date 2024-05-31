@@ -2,9 +2,11 @@
 @import 'bootstrap';
 
 @import './styles/variables.scss';
+@import './styles/button.scss';
 
 @import './styles/main-navigation.scss';
 @import './styles/home.scss';
+@import './styles/auth.scss';
 
 body {
   margin: 0;

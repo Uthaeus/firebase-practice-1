@@ -1,0 +1,19 @@
+
+.base-button {
+    width: max-content;
+    border: none;
+    padding: 4px 20px;
+    border-radius: 4px;
+    background-color: $blue;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+    &:hover {
+        opacity: 0.8;
+        transform: scale(1.03);
+    }
+}
