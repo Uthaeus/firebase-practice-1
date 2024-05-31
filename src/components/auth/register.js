@@ -22,6 +22,10 @@ export default function Register() {
         document.getElementById("image").click();
     }
 
+    const resetImage = () => {
+        setSelectedImage(null);
+    }
+
     const onSubmit = (data) => {
         console.log(data);
     }
@@ -30,15 +34,23 @@ export default function Register() {
         <div className="auth-container">
             <h1 className="auth-title">Register</h1>
 
-            <div className="auth-image-select-container" style={{ background: selectedImage ? `url(${selectedImage})` : `url(${image})`, backgroundSize: "cover", backgroundPosition: "center", width: "200px", height: "250px", borderRadius: "50%"}} onClick={openImageSelector}>
-                <input 
-                    type="file"
-                    id="image"
-                    name="image"
-                    className="auth-image-select"
-                    accept="image/png, image/jpeg"
-                    onChange={handleImageChange}
-                />
+            <div className="auth-avatar-container">
+                <div className="auth-image-select-container" onClick={openImageSelector}>
+                    <div className="auth-image-select-image" style={{ background: selectedImage ? `url(${selectedImage})` : `url(${image})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", borderRadius: "50%"}} />
+
+                    <p className="auth-image-select-text">Select Profile Image</p>
+                    
+                    <input 
+                        type="file"
+                        id="image"
+                        name="image"
+                        className="auth-image-select"
+                        accept="image/png, image/jpeg"
+                        onChange={handleImageChange}
+                    />
+                </div>
+
+                <p className="auth-avatar-reset-link" onClick={resetImage}>Reset Image</p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="auth-form">

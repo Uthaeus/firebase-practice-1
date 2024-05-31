@@ -16,13 +16,51 @@
         border-bottom: 2px solid $black;
     }
 
-    .auth-image-select-container {
+    .auth-avatar-container {
         position: absolute;
-        top: 200px;
+        top: 150px;
         left: 10%;
+
+        .auth-avatar-reset-link {
+            color: red;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+            &:hover {
+                opacity: 0.8;
+                transform: scale(1.04);
+            }
+        }
+    }
+
+    .auth-image-select-container {
+        border-bottom: 3px solid $blue;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+            transform: scale(1.01);
+        }
+
+        .auth-image-select-image {
+            width: 150px;
+            height: 200px;
+        }
 
         .auth-image-select {
             display: none;
+        }
+
+        .auth-image-select-text {
+            text-align: center;
+            color: $blue;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 0 0.5rem;
         }
     }
 
