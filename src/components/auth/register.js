@@ -1,11 +1,26 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import Button from "../ui/button";
+
+import image from "../../assets/images/guest-icon-add.png";
 
 export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageChange = (event) => {
+        // create url object
+        const url = URL.createObjectURL(event.target.files[0]);
+        setSelectedImage(url);
+    }
+
+    const openImageSelector = () => {
+        document.getElementById("image").click();
+    }
 
     const onSubmit = (data) => {
         console.log(data);
@@ -14,6 +29,17 @@ export default function Register() {
     return (
         <div className="auth-container">
             <h1 className="auth-title">Register</h1>
+
+            <div className="auth-image-select-container" style={{ background: selectedImage ? `url(${selectedImage})` : `url(${image})`, backgroundSize: "cover", backgroundPosition: "center", width: "200px", height: "250px", borderRadius: "50%"}} onClick={openImageSelector}>
+                <input 
+                    type="file"
+                    id="image"
+                    name="image"
+                    className="auth-image-select"
+                    accept="image/png, image/jpeg"
+                    onChange={handleImageChange}
+                />
+            </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
 
