@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 import Button from "../ui/button";
 
@@ -7,14 +8,30 @@ export default function ReviewForm({ review }) {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (review) {
             reset(review);
         }
     }, [ review, reset ]);
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data);
+        // TODO: get user data
+        // uid: user.uid
+        // author: user.username
+        try {
+            if (review) {
+                // update
+            } else {
+                // create
+            }
+        } catch (error) {
+            console.log('review form error: ', error);
+        } finally {
+            navigate("/reviews");
+        }
     }
 
     return (

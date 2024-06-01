@@ -1,32 +1,12 @@
-import { useState } from "react";
+import { useEffect, useContext } from "react";
 
 import ReviewItem from "../components/reviews/review-item";
 import Header from "../components/header";
 
-const dummyReviews = [
-
-    {
-        id: 1,
-        uid: "1",
-        title: "Title Here",
-        category: "book",
-        author: "Jimmy the Pirate",
-        content: "here's a whole bunch of content here, and here's another one. Keep going with the content so that there's enough to take up some space."
-    },
-
-    {
-        id: 2,
-        uid: "2",
-        title: "Something else",
-        category: "movie",
-        author: "D Debs",
-        content: "here's a whole bunch of content here, and here's another one. Keep going with the content so that there's enough to take up some space."
-    }
-]
+import { ReviewsContext } from "../store/reviews-context";
 
 export default function Reviews() {
-
-    const [reviews, setReviews] = useState(dummyReviews);
+    const { reviews } = useContext(ReviewsContext);
 
     return (
         <div className="reviews-container">

@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
+
+import { UserContext } from "../../store/user-context";
 
 import image from "../../assets/images/guest-icon-add.png";
 
@@ -8,9 +11,17 @@ import Button from "../ui/button";
 
 export default function EditProfile() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const { user } = useContext(UserContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        reset(user);
+    }, [user]);
 
     const handleImageChange = (event) => {
         // create url object
@@ -81,6 +92,11 @@ export default function EditProfile() {
 
                 <Button text="Register" />
             </form>
+            
+            <div className="auth-actions">
+                <Button text="Back to Reviews" onClick={() => navigate('/reviews')} style='button-secondary mx-2' />
+                <Button text="Back to Home" onClick={() => navigate('/')} />
+            </div>
         </div>
     );
 }
