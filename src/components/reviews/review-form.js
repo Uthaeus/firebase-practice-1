@@ -81,12 +81,12 @@ export default function ReviewForm({ review }) {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="review">Add your review here</label>
+                    <label htmlFor="content">Add your review here</label>
                     <textarea
-                        id="review"
+                        id="content"
                         className="form-control"
                         rows="5"
-                        {...register("review", { required: true })}
+                        {...register("content", { required: true })}
                     />
 
                     {errors.review && <span>This field is required</span>}
