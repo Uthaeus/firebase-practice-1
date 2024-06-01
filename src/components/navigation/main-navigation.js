@@ -3,6 +3,8 @@ import { useContext } from "react";
 
 import { UserContext } from "../../store/user-context";
 
+import UserItem from "./user-item";
+
 export default function MainNavigation() {
 
     const { user, logout } = useContext(UserContext);
@@ -22,6 +24,8 @@ export default function MainNavigation() {
 
             { user ? (
                 <>
+                    <UserItem user={user} />
+                    
                     <NavLink to="/edit-profile" className={({ isActive }) => isActive ? "nav-link nav-link-active" : "nav-link"}>Edit Profile</NavLink>
                     <p className="nav-link" onClick={logoutHandler}>Logout</p>
                 </>

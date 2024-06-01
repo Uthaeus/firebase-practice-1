@@ -19,6 +19,9 @@ export default function EditProfile() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (user.avatar) {
+            setSelectedImage(user.avatar);
+        }
         reset(user);
     }, [user]);
 
