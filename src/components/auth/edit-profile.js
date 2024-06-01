@@ -12,7 +12,7 @@ export default function EditProfile() {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
-    const { user, updateUser } = useContext(UserContext);
+    const { user, updateUserContext } = useContext(UserContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -49,7 +49,7 @@ export default function EditProfile() {
                 avatar: selectedImage
             }
 
-            updateUser(updatedUser);
+            updateUserContext(updatedUser);
         } catch (error) {
             console.log('edit profile error: ', error);
         } finally {

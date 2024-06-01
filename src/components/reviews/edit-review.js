@@ -16,7 +16,7 @@ export default function EditReview() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setReview(reviews.find(review => +review.id === +id));
+        setReview(reviews.find(review => review.id === id));
     }, [reviews, id]);
 
     const deleteHandler = () => {

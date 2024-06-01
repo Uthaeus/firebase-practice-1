@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
 
 import { db } from "../firebase";
 import { auth } from "../firebase";
@@ -10,7 +10,7 @@ import { auth } from "../firebase";
 export const UserContext = createContext({
     user: null,
     isAdmin: false,
-    updateUser: () => {},
+    updateUserContext: () => {},
     logout: () => {},
 });
 
@@ -47,22 +47,27 @@ export default function UserContextProvider({ children }) {
         setLoading(false);
     }
 
-    const updateUser = (data) => {
+    const updateUserContext = async (data) => {
 
-        const docRef = doc(db, "users", user.id);
-        updateDoc(docRef, data).then(() => {
-            setUser({ ...user, ...data });
-        })
-        .catch((error) => {
+        try {
+            const updatedUser = { ...user, ...data };
+            await updateDoc(doc(db, "users", user.id), updatedUser);
+            setUser(updatedUser);
+            await updateProfile(auth.currentUser, {
+                displayName: data.username,
+                email: data.email
+            })
+        } catch (error) {
             console.log("Error updating document: ", error);
-        });
+        }
+        
     }
 
     const logout = () => {
         signOut(auth);
     }
 
-    const value = { user, isAdmin, updateUser, logout };
+    const value = { user, isAdmin, updateUserContext, logout };
 
     return (
         <UserContext.Provider value={value}>

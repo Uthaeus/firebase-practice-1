@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 
+import { setDoc, doc, addDoc, collection, updateDoc } from "firebase/firestore";
+
+import { db } from "../../firebase";
+
 import { UserContext } from "../../store/user-context";
 import { ReviewsContext } from "../../store/reviews-context";
 
@@ -26,20 +30,17 @@ export default function ReviewForm({ review }) {
     const onSubmit = async (data) => {
         
         try {
-            const tempId = Math.floor(Math.random() * 10000);
-
-            const reviewObj = {
-                ...data,
-                id: review ? review.id : tempId,
-                uid: review ? review.uid : user.uid,
-                author: review ? review.author : user.username
-            }
+            const reviewObj = { ...data, author: user.username, uid: user.id };
 
             if (review) {
+                const docRef = doc(db, "reviews", review.id);
+                await updateDoc(docRef, reviewObj);
                 updateReview(reviewObj);
             } else {
-                addReview(reviewObj);
+                const docRef = await addDoc(collection(db, "reviews"), reviewObj);
+                addReview({ ...reviewObj, id: docRef.id });
             }
+
         } catch (error) {
             console.log('review form error: ', error);
         } finally {

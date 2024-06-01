@@ -18,7 +18,7 @@ export default function ReviewDetail() {
     const [review, setReview] = useState({});
 
     useEffect(() => {
-        setReview(reviews.find(review => +review.id === +id));
+        setReview(reviews.find(review => review.id === id));
     }, [reviews, id]);
 
     const deleteHandler = () => {
@@ -42,7 +42,7 @@ export default function ReviewDetail() {
             </div>
 
             <div className="review-detail-actions">
-                {(isAdmin || review.uid === user.uid) && (
+                {(isAdmin || review?.uid === user?.id) && (
                     <>
                         <Button text="Delete Review" onClick={deleteHandler} style='button-delete' />
                         <Button text="Edit Review" onClick={() => navigate(`/reviews/${review.id}/edit`)} style='button-edit' />

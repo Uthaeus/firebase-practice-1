@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { useEffect, useState } from "react";
 
 import { db } from "../firebase";
-import { doc, addDoc, getDocs, updateDoc, deleteDoc, collection } from "firebase/firestore";
+import { doc, addDoc, setDoc, getDocs, updateDoc, deleteDoc, collection } from "firebase/firestore";
 
 export const ReviewsContext = createContext({
     reviews: [],
@@ -20,7 +20,9 @@ export default function ReviewsContextProvider({ children }) {
         const fetchReviews = async () => {
             const docRef = collection(db, "reviews");
             const docSnap = await getDocs(docRef);
-            const reviews = docSnap.docs.map(doc => doc.data());
+            const reviews = docSnap.docs.map(doc => {
+                return { ...doc.data(), id: doc.id };
+            });
             setReviews(reviews);
             setIsLoading(false);
         }
@@ -29,13 +31,8 @@ export default function ReviewsContextProvider({ children }) {
     }, []);
 
     const addReview = (review) => {
-        const docRef = collection(db, "reviews");
-        addDoc(docRef, review).then(() => {
-            setReviews([...reviews, review]);
-        })
-        .catch((error) => {
-            console.log("Error adding document: ", error);
-        });
+        setReviews([...reviews, review]);
+
     }
 
     const updateReview = (review) => {

@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { signUpWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 import { db } from "../../firebase";
 
@@ -12,7 +12,6 @@ import { storage } from "../../firebase";
 
 import { auth } from "../../firebase";
 
-import { UserContext } from "../../store/user-context";
 import Button from "../ui/button";
 import image from "../../assets/images/guest-icon-add.png";
 
@@ -21,8 +20,6 @@ export default function Register() {
     const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
     const navigate = useNavigate();
-
-    const { updateUser } = useContext(UserContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -58,24 +55,32 @@ export default function Register() {
         }
 
         try {
-            const userCredential = await signUpWithEmailAndPassword(auth, data.email, data.password);
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
             const user = userCredential.user;
 
-            let downloadURL = null;
+            let downloadUrl = null;
 
             if (selectedImage !== null) {
-                const imageRef = ref(storage, `avatars/${user.uid}`);
-                await uploadBytes(imageRef, selectedImage);
-                downloadURL = await getDownloadURL(imageRef);
+                const imageRef = ref(storage, `images/${user.uid}`);
+                const imageSnapshot = await uploadBytes(imageRef, selectedImage);
+                downloadUrl = await getDownloadURL(imageSnapshot.ref);
             }
 
-            addDoc(collection(db, "users"), {
-                id: user.uid,
+            const docRef = doc(db, "users", user.uid);
+            const userData = {
                 username: data.username,
                 email: data.email,
                 role: "user",
-                avatar: downloadURL
+                avatar: downloadUrl
+            }
+
+            setDoc(docRef, userData).then(() => {
+                console.log('user created');
             })
+            .catch((error) => {
+                console.log("Error adding document: ", error);
+            });
+
 
             
 
