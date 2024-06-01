@@ -11,6 +11,7 @@ const dummyAdmin = {
 export const UserContext = createContext({
     user: null,
     isAdmin: false,
+    updateUser: () => {},
     logout: () => {},
 });
 
@@ -25,11 +26,15 @@ export default function UserContextProvider({ children }) {
         setIsAdmin(true);
     }, []);
 
+    const updateUser = (user) => {
+        setUser(user);
+    }
+
     const logout = () => {
         setUser(null);
     }
 
-    const value = { user, isAdmin, logout };
+    const value = { user, isAdmin, updateUser, logout };
 
     return (
         <UserContext.Provider value={value}>

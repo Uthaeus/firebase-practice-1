@@ -7,13 +7,12 @@ import { UserContext } from "../../store/user-context";
 import image from "../../assets/images/guest-icon-add.png";
 
 import Button from "../ui/button";
-// need user context - reset data in useEffect
 
 export default function EditProfile() {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
-    const { user } = useContext(UserContext);
+    const { user, updateUser } = useContext(UserContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -37,8 +36,22 @@ export default function EditProfile() {
         setSelectedImage(null);
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data);
+
+        try {
+            const updatedUser = {
+                ...user,
+                ...data,
+                avatar: selectedImage
+            }
+
+            updateUser(updatedUser);
+        } catch (error) {
+            console.log('edit profile error: ', error);
+        } finally {
+            navigate("/");
+        }
     }
 
     return (
