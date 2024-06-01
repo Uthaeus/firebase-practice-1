@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+
+import { UserContext } from "../../store/user-context";
 
 import Button from "../ui/button";
 
@@ -9,6 +11,10 @@ import image from "../../assets/images/guest-icon-add.png";
 export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const navigate = useNavigate();
+
+    const { updateUser } = useContext(UserContext);
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -26,8 +32,25 @@ export default function Register() {
         setSelectedImage(null);
     }
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        console.log('registering new user', data);
+
+        try {
+            // get user id
+
+            const tempId = Math.floor(Math.random() * 1000).toString();
+
+            const newUser = {
+                id: tempId,
+                username: data.username,
+                email: data.email,
+                avatar: selectedImage
+            }
+        } catch (error) {
+            console.log('register error: ', error);
+        } finally {
+            navigate("/");
+        }
     }
 
     return (
@@ -36,7 +59,7 @@ export default function Register() {
 
             <div className="auth-avatar-container">
                 <div className="auth-image-select-container" onClick={openImageSelector}>
-                    <div className="auth-image-select-image" style={{ background: selectedImage ? `url(${selectedImage})` : `url(${image})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", borderRadius: "50%"}} />
+                    <img src={selectedImage ? selectedImage : image} className="auth-image-select-image" alt="avatar" />
 
                     <p className="auth-image-select-text">Select Profile Image</p>
                     

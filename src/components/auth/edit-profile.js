@@ -23,7 +23,7 @@ export default function EditProfile() {
             setSelectedImage(user.avatar);
         }
         reset(user);
-    }, [user]);
+    }, [user , reset]);
 
     const handleImageChange = (event) => {
         // create url object
@@ -63,7 +63,8 @@ export default function EditProfile() {
 
             <div className="auth-avatar-container">
                 <div className="auth-image-select-container" onClick={openImageSelector}>
-                    <div className="auth-image-select-image" style={{ background: selectedImage ? `url(${selectedImage})` : `url(${image})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", borderRadius: "50%"}} />
+
+                    <img src={selectedImage || image} className="auth-image-select-image" alt="avatar" />
 
                     <p className="auth-image-select-text">Select Profile Image</p>
                     
@@ -106,7 +107,7 @@ export default function EditProfile() {
                     {...register("password")}
                 />
 
-                <Button text="Register" />
+                <Button text="Update Profile" />
             </form>
             
             <div className="auth-actions">
