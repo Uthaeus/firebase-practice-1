@@ -19,21 +19,49 @@ export default function ReviewForm({ review }) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="review-form">
+            <div className="row">
+                <div className="col-6">
+                    <div className="form-group">
+                        <label htmlFor="title">Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            className="form-control"
+                            autoFocus={true}
+                            {...register("title", { required: true })}
+                        />
 
-            <input
-                className="review-form-input"
-                type="text"
-                placeholder="title"
-                {...register("title", { required: true })}
-            />
-            {errors.title && <span>This field is required</span>}
+                        {errors.title && <span>This field is required</span>}
+                    </div>
+                </div>
 
-            <textarea
-                className="review-form-input"
-                placeholder="review"
-                {...register("review", { required: true })}
-            />
-            {errors.review && <span>This field is required</span>}
+                <div className="col-6">
+                    <div className="form-group">
+                        <label htmlFor="category">Category</label>
+                        <select id="category" className="form-select" {...register("category", { required: true })}>
+                            <option value="general">General</option>
+                            <option value="book">Book</option>
+                            <option value="movie">Movie</option>
+                            <option value="music">Music</option>
+                            <option value="game">Game</option>
+                        </select>
+
+                        {errors.category && <span>This field is required</span>}
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="review">Add your review here</label>
+                    <textarea
+                        id="review"
+                        className="form-control"
+                        rows="5"
+                        {...register("review", { required: true })}
+                    />
+
+                    {errors.review && <span>This field is required</span>}
+                </div>
+            </div>
 
             <Button text="Submit Review" />
         </form>

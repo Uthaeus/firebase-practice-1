@@ -22,3 +22,62 @@
         margin-top: 2rem;
     }
 }
+
+.review-container {
+    min-height: calc(100vh - 50px);
+    background-color: $lightBlue;
+    padding: 2rem 8%;
+    position: relative;
+
+    .review-title {
+        padding-right: 3rem;
+        margin-bottom: 4rem;
+        font-size: 2rem;
+        color: $blue;
+        width: max-content;
+        font-weight: 500;
+        border-bottom: 3px solid $blue;
+    }
+
+    .review-actions {
+        position: absolute;
+        bottom: 2rem;
+        right: 8%;
+    }
+}
+
+.review-form {
+    width: 80%;
+    margin: 0 auto;
+
+    label {
+        font-weight: 500;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: $blue;
+    }
+
+    input {
+        margin-bottom: 1rem;
+        font-size: 1.4em;
+        font-weight: 600;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    select {
+        margin-bottom: 1rem;
+        font-size: 1.4em;
+        font-weight: 600;
+        border-radius: 0.5rem;
+    }
+
+    textarea {
+        margin-bottom: 3rem;
+        font-size: 1.2em;
+        font-weight: 500;
+        border-radius: 0.5rem;
+    }
+}

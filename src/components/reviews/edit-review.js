@@ -14,6 +14,7 @@ export default function EditReview() {
             <ReviewForm />
 
             <div className="review-actions">
+                <Button text="Back to Reviews" onClick={() => navigate("/reviews")} style='button-secondary mx-2' />
                 <Button text="Back to Home" onClick={() => navigate("/")} />
             </div>
         </div>
