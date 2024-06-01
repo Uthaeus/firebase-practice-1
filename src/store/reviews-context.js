@@ -1,26 +1,8 @@
 import { createContext } from "react";
 import { useEffect, useState } from "react";
 
-const dummyReviews = [
-
-    {
-        id: 1,
-        uid: "1",
-        title: "Title Here",
-        category: "book",
-        author: "Jimmy the Pirate",
-        content: "here's a whole bunch of content here, and here's another one. Keep going with the content so that there's enough to take up some space."
-    },
-
-    {
-        id: 2,
-        uid: "2",
-        title: "Something else",
-        category: "movie",
-        author: "D Debs",
-        content: "here's a whole bunch of content here, and here's another one. Keep going with the content so that there's enough to take up some space."
-    }
-]
+import { db } from "../firebase";
+import { doc, addDoc, getDocs, updateDoc, deleteDoc, collection } from "firebase/firestore";
 
 export const ReviewsContext = createContext({
     reviews: [],
@@ -35,21 +17,44 @@ export default function ReviewsContextProvider({ children }) {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        console.log('setting reviews');
-        setReviews(dummyReviews);
-        setIsLoading(false);
-    }, [ ]);
+        const fetchReviews = async () => {
+            const querySnapshot = await getDocs(db.collection("reviews"));
+            setReviews(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+            setIsLoading(false);
+
+        }
+
+        fetchReviews();
+    }, []);
 
     const addReview = (review) => {
-        setReviews([...reviews, review]);
+        const docRef = collection(db, "reviews");
+        addDoc(docRef, review).then(() => {
+            setReviews([...reviews, review]);
+        })
+        .catch((error) => {
+            console.log("Error adding document: ", error);
+        });
     }
 
     const updateReview = (review) => {
-        setReviews(reviews.map(r => r.id === review.id ? review : r));
+        const docRef = doc(db, "reviews", review.id);
+        updateDoc(docRef, review).then(() => {
+            setReviews(reviews.map(r => r.id === review.id ? review : r));
+        })
+        .catch((error) => {
+            console.log("Error updating document: ", error);
+        });
     }
 
-    const deleteReview = (review) => {
-        setReviews(reviews.filter(r => r.id !== review.id));
+    const deleteReview = (id) => {
+        const docRef = doc(db, "reviews", id);
+        deleteDoc(docRef).then(() => {
+            setReviews(reviews.filter(r => r.id !== id));
+        })
+        .catch((error) => {
+            console.log("Error deleting document: ", error);
+        });
     }
 
     const value = { reviews, addReview, updateReview, deleteReview };
