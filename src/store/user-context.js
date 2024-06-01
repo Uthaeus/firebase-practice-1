@@ -39,6 +39,9 @@ export default function UserContextProvider({ children }) {
                     setIsAdmin(true);
                 }
             }
+        } else {
+            setUser(null);
+            setIsAdmin(false);
         }
 
         setLoading(false);

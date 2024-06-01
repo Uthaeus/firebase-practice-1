@@ -2,15 +2,23 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 
+import { signUpWithEmailAndPassword } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
+
+import { db } from "../../firebase";
+
+import { storage } from "../../firebase";
+
+import { auth } from "../../firebase";
+
 import { UserContext } from "../../store/user-context";
-
 import Button from "../ui/button";
-
 import image from "../../assets/images/guest-icon-add.png";
 
 export default function Register() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setError } = useForm();
 
     const navigate = useNavigate();
 
@@ -35,17 +43,42 @@ export default function Register() {
     const onSubmit = async (data) => {
         console.log('registering new user', data);
 
+        if (data.password !== data.confirmPassword) {
+            setError("confirmPassword", {
+                type: "validate",
+                message: "Passwords do not match"
+            });
+
+            return;
+        } else if (data.password.length < 6) {
+            setError("confirmPassword", {
+                type: "validate",
+                message: "Password must be at least 6 characters"
+            });
+        }
+
         try {
-            // get user id
+            const userCredential = await signUpWithEmailAndPassword(auth, data.email, data.password);
+            const user = userCredential.user;
 
-            const tempId = Math.floor(Math.random() * 1000).toString();
+            let downloadURL = null;
 
-            const newUser = {
-                id: tempId,
+            if (selectedImage !== null) {
+                const imageRef = ref(storage, `avatars/${user.uid}`);
+                await uploadBytes(imageRef, selectedImage);
+                downloadURL = await getDownloadURL(imageRef);
+            }
+
+            addDoc(collection(db, "users"), {
+                id: user.uid,
                 username: data.username,
                 email: data.email,
-                avatar: selectedImage
-            }
+                role: "user",
+                avatar: downloadURL
+            })
+
+            
+
         } catch (error) {
             console.log('register error: ', error);
         } finally {

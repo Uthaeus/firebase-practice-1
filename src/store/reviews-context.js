@@ -18,10 +18,11 @@ export default function ReviewsContextProvider({ children }) {
 
     useEffect(() => {
         const fetchReviews = async () => {
-            const querySnapshot = await getDocs(db.collection("reviews"));
-            setReviews(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+            const docRef = collection(db, "reviews");
+            const docSnap = await getDocs(docRef);
+            const reviews = docSnap.docs.map(doc => doc.data());
+            setReviews(reviews);
             setIsLoading(false);
-
         }
 
         fetchReviews();
