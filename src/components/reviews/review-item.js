@@ -1,12 +1,14 @@
+import { Link } from "react-router-dom";
 
 export default function ReviewItem({ review }) {
 
     return (
         <div className="review-item">
-            <h2 className="review-item-title">{review.title}</h2>
+            <Link to={`/reviews/${review.id}`} className="review-item-title">{review.title}</Link>
+
             <div className="review-item-details">
                 <p className="review-item-category">{review.category}</p>
-                <p className="review-item-author">{review.author}</p>
+                <p className="review-item-author">posted by {review.author}</p>
             </div>
         </div>
     );

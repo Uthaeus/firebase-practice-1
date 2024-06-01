@@ -1,0 +1,50 @@
+
+.review-detail {
+    height: calc(100vh - 50px);
+    padding: 2rem 8%;
+    position: relative;
+
+    .review-detail-header {
+        width: 50%;
+        margin: 0 auto;
+        margin-bottom: 3rem;
+
+        .review-detail-title {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            color: $blue;
+            width: max-content;
+            font-weight: 500;
+            border-bottom: 3px solid $blue;
+        }
+
+        .review-detail-category {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: $blue;
+        }
+
+        .review-detail-author {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: $blue;
+        }
+    }
+
+    .review-detail-body {
+        width: 60%;
+        margin: 0 auto;
+        border-bottom: 1px solid $blueGrey;
+
+        .review-detail-content {
+            font-size: 1.2rem;
+            color: $blueGrey;
+        }
+    }
+
+    .review-detail-actions {
+        position: absolute;
+        bottom: 2rem;
+        right: 8%;
+    }
+}

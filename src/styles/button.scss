@@ -3,6 +3,7 @@
     width: max-content;
     border: none;
     padding: 4px 20px;
+    margin: 0 0.5rem;
     border-radius: 4px;
     background-color: $blue;
     color: white;
@@ -20,6 +21,10 @@
 
 .button-secondary {
     background-color: $blueGrey;
+}
+
+.button-edit {
+    background-color: $green;
 }
 
 .button-delete {

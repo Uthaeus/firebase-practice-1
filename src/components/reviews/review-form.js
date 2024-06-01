@@ -1,12 +1,19 @@
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
+
+import { UserContext } from "../../store/user-context";
+import { ReviewsContext } from "../../store/reviews-context";
 
 import Button from "../ui/button";
 
 export default function ReviewForm({ review }) {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const { user } = useContext(UserContext);
+
+    const { addReview, updateReview } = useContext(ReviewsContext);
 
     const navigate = useNavigate();
 
@@ -17,15 +24,21 @@ export default function ReviewForm({ review }) {
     }, [ review, reset ]);
 
     const onSubmit = async (data) => {
-        console.log(data);
-        // TODO: get user data
-        // uid: user.uid
-        // author: user.username
+        
         try {
+            const tempId = Math.floor(Math.random() * 10000);
+
+            const reviewObj = {
+                ...data,
+                id: review ? review.id : tempId,
+                uid: review ? review.uid : user.uid,
+                author: review ? review.author : user.username
+            }
+
             if (review) {
-                // update
+                updateReview(reviewObj);
             } else {
-                // create
+                addReview(reviewObj);
             }
         } catch (error) {
             console.log('review form error: ', error);

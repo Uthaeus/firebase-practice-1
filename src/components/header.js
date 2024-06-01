@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router";
+import { useContext } from "react";
+
+import { UserContext } from "../store/user-context";
 
 import Button from "./ui/button";
 
 export default function Header() {
+
+    const { user } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -12,7 +17,7 @@ export default function Header() {
             <p className="home-description">Welcome! Check out what people have to say about stuff.</p>
 
             <div className="home-header-actions">
-                <Button text="Create New Review" onClick={() => navigate("/reviews/new")} />
+                {user && <Button text="Create New Review" onClick={() => navigate("/reviews/new")} />}
             </div>
         </div>
     );
