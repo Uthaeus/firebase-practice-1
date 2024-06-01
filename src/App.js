@@ -6,6 +6,9 @@ import Reviews from "./pages/reviews";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import EditProfile from "./components/auth/edit-profile";
+import NewReview from "./components/reviews/new-review";
+import EditReview from "./components/reviews/edit-review";
+import ReviewDetail from "./components/reviews/review-detail";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,18 @@ const router = createBrowserRouter([
       {
         path: "/reviews",
         element: <Reviews />,
+      },
+      {
+        path: "/reviews/new",
+        element: <NewReview />,
+      },
+      {
+        path: "/reviews/:id",
+        element: <ReviewDetail />,
+      }, 
+      {
+        path: "/reviews/:id/edit",
+        element: <EditReview />,
       }
     ],
   }

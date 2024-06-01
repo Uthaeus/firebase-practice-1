@@ -4,4 +4,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .home-header {
+        width: 400px;
+        padding: 2rem 3rem;
+        background-color: $blueGrey;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        .home-title {
+            font-size: 3rem;
+            color: $black;
+            font-weight: 600;
+        }
+
+        .home-description {
+            font-size: 1.2rem;
+            color: $black;
+        }
+
+        .home-header-actions {
+            width: 100%;
+            display: flex;
+            justify-content: end;
+        }
+    }
 }
