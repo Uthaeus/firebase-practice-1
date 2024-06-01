@@ -1,0 +1,24 @@
+
+.reviews-container {
+    min-height: calc(100vh - 50px);
+    background-color: $lightBlue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .reviews-title {
+        margin-right: 10%;
+        margin-top: 2rem;
+        padding-right: 3rem;
+        font-size: 2rem;
+        color: $blue;
+        width: max-content;
+        font-weight: 500;
+        border-bottom: 3px solid $blue;
+    }
+
+    .reviews-list {
+        width: 80%;
+        margin-top: 2rem;
+    }
+}

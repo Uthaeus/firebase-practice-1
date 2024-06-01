@@ -1,10 +1,30 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
+import image from "../../assets/images/guest-icon-add.png";
+
+import Button from "../ui/button";
 // need user context - reset data in useEffect
 
 export default function EditProfile() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageChange = (event) => {
+        // create url object
+        const url = URL.createObjectURL(event.target.files[0]);
+        setSelectedImage(url);
+    }
+
+    const openImageSelector = () => {
+        document.getElementById("image").click();
+    }
+
+    const resetImage = () => {
+        setSelectedImage(null);
+    }
 
     const onSubmit = (data) => {
         console.log(data);

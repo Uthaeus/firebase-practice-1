@@ -2,7 +2,11 @@ import { useNavigate } from "react-router";
 
 import ReviewForm from "./review-form";
 
+import Button from "../ui/button";
+
 export default function EditReview() {
+
+    const navigate = useNavigate();
 
     return (
         <div className="review-container">
