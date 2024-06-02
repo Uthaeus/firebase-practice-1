@@ -22,7 +22,7 @@ export default function ReviewDetail() {
     }, [reviews, id]);
 
     const deleteHandler = () => {
-        deleteReview(review);
+        deleteReview(review.id);
         navigate("/reviews");
     }
 
