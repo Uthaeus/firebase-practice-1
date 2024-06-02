@@ -2,6 +2,11 @@ import { useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 
+import { updatePassword } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import { auth, storage } from "../../firebase";
+
 import { UserContext } from "../../store/user-context";
 
 import image from "../../assets/images/guest-icon-add.png";
@@ -27,8 +32,9 @@ export default function EditProfile() {
 
     const handleImageChange = (event) => {
         // create url object
-        const url = URL.createObjectURL(event.target.files[0]);
-        setSelectedImage(url);
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setSelectedImage({ file, url });
     }
 
     const openImageSelector = () => {
@@ -43,10 +49,32 @@ export default function EditProfile() {
         console.log(data);
 
         try {
+            if (data.password !== '') {
+                if (data.password.length < 6) {
+                    setError("password", {
+                        type: "validate",
+                        message: "Password must be at least 6 characters"
+                    });
+
+                    return;
+                } else {
+                    await updatePassword(auth.currentUser, data.password);
+                }
+            }
+
+            let downloadUrl = null;
+
+            if (selectedImage !== null) {
+                const imageRef = ref(storage, `images/${user.id}`);
+                const imageSnapshot = await uploadBytes(imageRef, selectedImage.file);
+                downloadUrl = await getDownloadURL(imageSnapshot.ref);
+            }
+
             const updatedUser = {
                 ...user,
-                ...data,
-                avatar: selectedImage
+                username: data.username,
+                email: data.email,
+                avatar: downloadUrl
             }
 
             updateUserContext(updatedUser);
@@ -64,7 +92,7 @@ export default function EditProfile() {
             <div className="auth-avatar-container">
                 <div className="auth-image-select-container" onClick={openImageSelector}>
 
-                    <img src={selectedImage || image} className="auth-image-select-image" alt="avatar" />
+                    <img src={selectedImage ? selectedImage.url : image} className="auth-image-select-image" alt="avatar" />
 
                     <p className="auth-image-select-text">Select Profile Image</p>
                     
@@ -103,15 +131,16 @@ export default function EditProfile() {
                 <input
                     className="auth-input"
                     type="password"
-                    placeholder="Password"
+                    placeholder="leave blank to keep the same"
                     {...register("password")}
                 />
+                {errors.password && <span>This field is required</span>}
 
                 <Button text="Update Profile" />
             </form>
             
             <div className="auth-actions">
-                <Button text="Back to Reviews" onClick={() => navigate('/reviews')} style='button-secondary mx-2' />
+                <Button text="Back to Reviews" onClick={() => navigate('/reviews')} style='button-secondary' />
                 <Button text="Back to Home" onClick={() => navigate('/')} />
             </div>
         </div>

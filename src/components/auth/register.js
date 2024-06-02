@@ -25,8 +25,9 @@ export default function Register() {
 
     const handleImageChange = (event) => {
         // create url object
-        const url = URL.createObjectURL(event.target.files[0]);
-        setSelectedImage(url);
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setSelectedImage({ file, url });
     }
 
     const openImageSelector = () => {
@@ -62,7 +63,7 @@ export default function Register() {
 
             if (selectedImage !== null) {
                 const imageRef = ref(storage, `images/${user.uid}`);
-                const imageSnapshot = await uploadBytes(imageRef, selectedImage);
+                const imageSnapshot = await uploadBytes(imageRef, selectedImage.file);
                 downloadUrl = await getDownloadURL(imageSnapshot.ref);
             }
 
@@ -97,7 +98,7 @@ export default function Register() {
 
             <div className="auth-avatar-container">
                 <div className="auth-image-select-container" onClick={openImageSelector}>
-                    <img src={selectedImage ? selectedImage : image} className="auth-image-select-image" alt="avatar" />
+                    <img src={selectedImage ? selectedImage.url : image} className="auth-image-select-image" alt="avatar" />
 
                     <p className="auth-image-select-text">Select Profile Image</p>
                     
