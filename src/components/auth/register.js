@@ -75,15 +75,7 @@ export default function Register() {
                 avatar: downloadUrl
             }
 
-            setDoc(docRef, userData).then(() => {
-                console.log('user created');
-            })
-            .catch((error) => {
-                console.log("Error adding document: ", error);
-            });
-
-
-            
+            await setDoc(docRef, userData);
 
         } catch (error) {
             console.log('register error: ', error);

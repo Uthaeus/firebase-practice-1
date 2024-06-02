@@ -2,10 +2,11 @@ import { useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { updatePassword } from "firebase/auth";
+import { updatePassword, updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { updateDoc, doc } from "firebase/firestore";
 
-import { auth, storage } from "../../firebase";
+import { auth, storage, db } from "../../firebase";
 
 import { UserContext } from "../../store/user-context";
 
@@ -15,7 +16,7 @@ import Button from "../ui/button";
 
 export default function EditProfile() {
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset, setError } = useForm();
 
     const { user, updateUserContext } = useContext(UserContext);
 
@@ -25,7 +26,7 @@ export default function EditProfile() {
 
     useEffect(() => {
         if (user.avatar) {
-            setSelectedImage(user.avatar);
+            setSelectedImage({url: user.avatar});
         }
         reset(user);
     }, [user , reset]);
@@ -46,7 +47,6 @@ export default function EditProfile() {
     }
 
     const onSubmit = async (data) => {
-        console.log(data);
 
         try {
             if (data.password !== '') {
@@ -55,29 +55,36 @@ export default function EditProfile() {
                         type: "validate",
                         message: "Password must be at least 6 characters"
                     });
-
+                    reset({password: ''});
                     return;
                 } else {
                     await updatePassword(auth.currentUser, data.password);
                 }
             }
+            console.log('after password update');
 
             let downloadUrl = null;
 
-            if (selectedImage !== null) {
+            if (selectedImage !== null && selectedImage.url !== user.avatar) {
                 const imageRef = ref(storage, `images/${user.id}`);
                 const imageSnapshot = await uploadBytes(imageRef, selectedImage.file);
                 downloadUrl = await getDownloadURL(imageSnapshot.ref);
             }
 
             const updatedUser = {
-                ...user,
                 username: data.username,
                 email: data.email,
-                avatar: downloadUrl
+                avatar: downloadUrl || user.avatar
             }
 
+            await updateDoc(doc(db, "users", user.id), updatedUser);
+
+            await updateProfile(auth.currentUser, { displayName: data.username, email: data.email });
+
+            console.log('after profile update');
+
             updateUserContext(updatedUser);
+
         } catch (error) {
             console.log('edit profile error: ', error);
         } finally {

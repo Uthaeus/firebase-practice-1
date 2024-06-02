@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useEffect, useState } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { db } from "../firebase";
 import { auth } from "../firebase";
@@ -47,20 +47,9 @@ export default function UserContextProvider({ children }) {
         setLoading(false);
     }
 
-    const updateUserContext = async (data) => {
-
-        try {
-            const updatedUser = { ...user, ...data };
-            await updateDoc(doc(db, "users", user.id), updatedUser);
-            setUser(updatedUser);
-            await updateProfile(auth.currentUser, {
-                displayName: data.username,
-                email: data.email
-            })
-        } catch (error) {
-            console.log("Error updating document: ", error);
-        }
-        
+    const updateUserContext = (newUser) => {
+        console.log('updating user context', newUser);
+        setUser(newUser);
     }
 
     const logout = () => {

@@ -17,6 +17,7 @@ export default function Header() {
             <p className="home-description">Welcome! Check out what people have to say about stuff.</p>
 
             <div className="home-header-actions">
+                <Button text="See what people have to say about stuff" onClick={() => navigate("/reviews")} style='button-edit' />
                 {user && <Button text="Create New Review" onClick={() => navigate("/reviews/new")} />}
             </div>
         </div>
